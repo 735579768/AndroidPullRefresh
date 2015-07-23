@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF" >
+     >
 
     <RelativeLayout
         android:id="@+id/pull_to_refresh_header"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
-        android:background="@android:color/white"
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp" >
@@ -58,7 +57,7 @@
             android:layout_below="@+id/pull_to_refresh_text"
             android:layout_gravity="center"
             android:gravity="center|center_vertical"
-            android:text="更新于：07-28 15:32"
+            android:text=""
             android:textSize="12sp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:visibility="gone" />

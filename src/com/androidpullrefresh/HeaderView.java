@@ -1,7 +1,10 @@
 package com.androidpullrefresh;
 
+import java.text.SimpleDateFormat;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ public class HeaderView extends LinearLayout {
 	private ImageView	arrows;
 	private TextView	tvRefresh;
 	private TextView	tvDate;
+	private String		refreshDate;
 	private boolean		isArrowsUp	= true;
 	private HeaderView  headerView;
 
@@ -38,6 +42,7 @@ public class HeaderView extends LinearLayout {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.pull_header, this);
 		headerView=this;
+		//this.setBackgroundColor( getResources().getColor(android.R.color.background_dark));
 		init(context);
 	}
 
@@ -105,6 +110,10 @@ public class HeaderView extends LinearLayout {
 		arrows.clearAnimation();
 		arrows.setVisibility(View.GONE);
 		tvRefresh.setVisibility(View.VISIBLE);
+/*		if(TextUtils.isEmpty(refreshDate))refreshDate="未刷新过";
+		tvDate.setText(refreshDate);*/
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		refreshDate="上次更新:"+sdf.format(new java.util.Date());
 		tvDate.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.VISIBLE);
 		tvRefresh.setText("正在刷新...");
@@ -120,11 +129,14 @@ public class HeaderView extends LinearLayout {
 	 *            当前高度
 	 */
 	public int setPadding(int presetHeight, int currentHeight) {
+		//移动过程中设置顶部
 		this.setPadding(0, currentHeight, 0, 0);
-		curtop=headerView.getPaddingTop();
-		new ScrollTask().execute(currentHeight);
+		//if(TextUtils.isEmpty(refreshDate))refreshDate="未刷新过";
+		tvDate.setText(refreshDate);
+/*		curtop=headerView.getPaddingTop();
+		new ScrollTask().execute(currentHeight);*/
 		// 初始化箭头状态向下
-		if (currentHeight <= presetHeight/2) {
+		if (currentHeight <= presetHeight/3) {
 			Log.v("TouthY","状态改变成下拉刷新");
 			return setStartRefresh();
 		} else { // 改变按钮状态向上

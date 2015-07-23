@@ -267,7 +267,10 @@ public class PullScrollView extends ScrollView {
 		}
 
 		if (pullState == PULL_UP_STATE || pullState == RELEASE_TO_LOADING) {
-			pullState = footerView.setPadding(footContentHeight, (Math.abs(-tempY) / RATIO));
+			int pb=0;
+			pb=(Math.abs(-tempY) / RATIO);
+			Log.v("bottom",pb+"");
+			pullState = footerView.setPadding(footContentHeight,pb);
 		}
 	}
 
