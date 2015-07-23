@@ -66,6 +66,9 @@ public class PullScrollView extends ScrollView {
 	// 刷新、加载更多 接口
 	private OnPullListener		onPullListener;
 	
+	//是否要底部加载更多
+	private boolean 			isfooter=true;
+	
 /*	Handler mHandler=new Handler();
 	Runnable scrollViewRunable = new Runnable() {  
 	    @Override  
@@ -74,6 +77,10 @@ public class PullScrollView extends ScrollView {
 			pullscrollView.fullScroll(ScrollView.FOCUS_UP);
 	    }  
 	  };*/
+	public void setShowFooter(boolean show){
+		this.isfooter=show;
+		innerLayout.removeViewAt(2);
+	}
 	public PullScrollView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
@@ -165,7 +172,7 @@ public class PullScrollView extends ScrollView {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		addfooterView();
+		if(isfooter)addfooterView();
 	}
 
 	/**
@@ -215,9 +222,9 @@ public class PullScrollView extends ScrollView {
 						//historyY=tempY;
 						changeheaderViewHeight(tempY);
 					}
-
+					
 					// 如果 ScrollViwe 滑倒最底端，且有上拉刷加载更多手势，则激活上拉加载更多动作
-					else if (tempY < 0) { // 上拉加载更多
+					else if (tempY < 0 && isfooter) { // 上拉加载更多
 						changefooterViewHeight(tempY);
 					}
 					break;
