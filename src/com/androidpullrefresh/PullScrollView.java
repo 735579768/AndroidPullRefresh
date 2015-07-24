@@ -77,7 +77,7 @@ public class PullScrollView extends ScrollView {
 			pullscrollView.fullScroll(ScrollView.FOCUS_UP);
 	    }  
 	  };*/
-	public void setShowFooter(boolean show){
+	public void setFooterShow(boolean show){
 		this.isfooter=show;
 		innerLayout.removeViewAt(2);
 	}
