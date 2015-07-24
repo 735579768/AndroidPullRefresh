@@ -124,7 +124,7 @@ public class FooterView extends LinearLayout {
 	/*		curbottom=footerView.getPaddingBottom();
 			new ScrollTask().execute(paddingHeight);*/
 			// 初始化箭头状态向上
-			if (paddingHeight <= presetHeight/3) {
+			if (paddingHeight <= presetHeight/2) {
 				return setStartLoad();
 			} else { // 改变按钮状态向下
 				return releaseLoad();
@@ -217,5 +217,10 @@ public class FooterView extends LinearLayout {
 	            e.printStackTrace();
 	        }
 	    }
+
+		public void setBackgroundColor(String string) {
+			// TODO Auto-generated method stub
+			
+		}
 
 }

@@ -1,5 +1,6 @@
 package com.androidpullrefresh;
 
+import android.R;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -19,6 +21,9 @@ import android.widget.ScrollView;
  * @author www.zhaokeli.com
  */
 public class PullScrollView extends ScrollView {
+	private AlphaAnimation mHideAnimation= null;//渐隐
+
+	private AlphaAnimation mShowAnimation= null;//渐显
 
 	private static final String	TAG					= "PullScrollView";
 
@@ -45,8 +50,6 @@ public class PullScrollView extends ScrollView {
 
 	// 实际的padding的距离与界面上偏移距离的比例
 	private final static int	RATIO				= 4;
-	
-
 	private LinearLayout		innerLayout;
 	private LinearLayout		bodyLayout;
 
@@ -149,6 +152,7 @@ public class PullScrollView extends ScrollView {
 		footContentHeight = footerView.getMeasuredHeight();
 		footerView.setPaddingButtom();
 		footerView.invalidate();
+		setHideAnimation(footerView,0);
 		innerLayout.addView(footerView);
 	}
 
@@ -198,6 +202,7 @@ public class PullScrollView extends ScrollView {
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
 		}
+		onTouchEvent(event);
 		return super.onInterceptTouchEvent(event);
 	}
 
@@ -211,6 +216,7 @@ public class PullScrollView extends ScrollView {
 			switch (event.getAction()) {
 
 				case MotionEvent.ACTION_DOWN:
+					setShowAnimation(footerView,300);
 					scrollY = getScrollY();
 					startY = (int) event.getY();
 					break;
@@ -232,7 +238,7 @@ public class PullScrollView extends ScrollView {
 					break;
 
 				case MotionEvent.ACTION_UP:
-
+					setHideAnimation(footerView,300);
 					// 重置 headerView、footerView ,激化监听
 					resetPullStateForActionUp();
 					break;
@@ -396,7 +402,38 @@ public class PullScrollView extends ScrollView {
 		}
 		childView.measure(childWidthSpec, childHeightSpec);
 	}
-
+	/**
+	* View渐隐动画效果
+	*
+	*/
+	private void setHideAnimation( View view, int duration ){
+	    if( null == view || duration < 0 ){
+	        return;
+	    }
+	    if( null != mHideAnimation ){
+	        mHideAnimation.cancel( );
+	    }
+	    mHideAnimation = new AlphaAnimation(1.0f, 0.1f);
+	    mHideAnimation.setDuration( duration );
+	    mHideAnimation.setFillAfter( true );
+	    view.startAnimation( mHideAnimation );
+	}
+	/**
+	* View渐现动画效果
+	*
+	*/
+	private void setShowAnimation( View view, int duration ){
+	    if( null == view || duration < 0 ){
+	        return;
+	    }
+	    if( null != mShowAnimation ){
+	        mShowAnimation.cancel( );
+	    }
+	    mShowAnimation = new AlphaAnimation(0.1f, 1.0f);
+	    mShowAnimation.setDuration( duration );
+	    mShowAnimation.setFillAfter( true );
+	    view.startAnimation( mShowAnimation );
+	} 
 	public interface OnPullListener {
 		void refresh();
 
@@ -406,6 +443,4 @@ public class PullScrollView extends ScrollView {
 	public void setOnPullListener(OnPullListener onPullListener) {
 		this.onPullListener = onPullListener;
 	}
-
-
 }

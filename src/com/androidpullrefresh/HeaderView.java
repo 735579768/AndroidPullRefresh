@@ -136,7 +136,7 @@ public class HeaderView extends LinearLayout {
 /*		curtop=headerView.getPaddingTop();
 		new ScrollTask().execute(currentHeight);*/
 		// 初始化箭头状态向下
-		if (currentHeight <= presetHeight/3) {
+		if (currentHeight <= presetHeight/2) {
 			Log.v("TouthY","状态改变成下拉刷新");
 			return setStartRefresh();
 		} else { // 改变按钮状态向上
