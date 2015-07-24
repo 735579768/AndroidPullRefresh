@@ -29,7 +29,7 @@ public class FooterView extends LinearLayout {
 	private boolean		isArrowsUp	= true;
 	private FooterView  footerView;
 	//数据加载完成不再加载
-	private boolean     isloadover=false;//数据是否加载完成啦
+	public boolean     isloadover=false;//数据是否加载完成啦
 	public FooterView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -159,6 +159,15 @@ public class FooterView extends LinearLayout {
 		tvRefresh.setText(str);
 		arrows.setVisibility(View.GONE);
 		progressBar.setVisibility(View.GONE);
+	}
+	/**
+	 *重新开始加载数据重置
+	 ***/
+	public void resetloadOver(){
+		isloadover=false;//设置成数据没有加载完成重新加载
+		tvRefresh.setText("上拉加载更多");
+		arrows.setVisibility(View.VISIBLE);
+		progressBar.setVisibility(View.VISIBLE);		
 	}
 	/**
 	 * 隐藏加载更多按钮

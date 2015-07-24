@@ -1,6 +1,7 @@
 package com.androidpullrefresh;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -44,6 +45,7 @@ public class PullScrollView extends ScrollView {
 
 	// 实际的padding的距离与界面上偏移距离的比例
 	private final static int	RATIO				= 4;
+	
 
 	private LinearLayout		innerLayout;
 	private LinearLayout		bodyLayout;
@@ -98,7 +100,7 @@ public class PullScrollView extends ScrollView {
 	private void init(Context context) {
 
 		this.mContext = context;
-
+		this.setVerticalScrollBarEnabled(false);
 		// ScrollView 可以滑动必须有且只有一个子View - ScrollView 内装的View都将放在 innerLayout 里面
 		// ScrollView 设置为上下滚动 LinearLayout.VERTICAL
 		innerLayout = new LinearLayout(context);
@@ -298,6 +300,9 @@ public class PullScrollView extends ScrollView {
 			if (pullState == RELEASE_TO_REFRESH) {
 				pullState = headerView.setRefreshing();
 				headerView.setPaddingTop(0);
+				//松手刷新等于重新加载，直接把下面加载更多的状态重置
+				footerView.resetloadOver();
+				footerView.setStartLoad();
 				if(onPullListener!=null)onPullListener.refresh();
 			}
 			// 松开手加载更多
@@ -309,6 +314,7 @@ public class PullScrollView extends ScrollView {
 			// 重置到最初状态
 			else {
 				headerView.setPaddingTop(-1 * headContentHeight);
+				//这个地方判断内容是不是满屏(等待实现)
 				footerView.setPaddingButtom();
 				pullState = DONE;
 			}
@@ -344,7 +350,7 @@ public class PullScrollView extends ScrollView {
 		pullState = DONE;
 	}
 	/**
-	 * 加载更多按钮不可见
+	 * 加载更多按钮可见
 	 */
 	public void setfooterViewShow() {
 		footerView.setStartLoad();
@@ -363,6 +369,7 @@ public class PullScrollView extends ScrollView {
 	 * 加载更多按钮重置为加载更多状态
 	 */
 	public void setfooterViewReset() {
+		footerView.resetloadOver();
 		footerView.setStartLoad();
 		pullState = DONE;
 	}
@@ -399,5 +406,6 @@ public class PullScrollView extends ScrollView {
 	public void setOnPullListener(OnPullListener onPullListener) {
 		this.onPullListener = onPullListener;
 	}
+
 
 }
