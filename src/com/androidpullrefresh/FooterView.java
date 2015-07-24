@@ -119,16 +119,16 @@ public class FooterView extends LinearLayout {
 	public int setPadding(int presetHeight, int paddingHeight) {
 		//如果没有加载完成的话就加载
 		if(!isloadover){
-		//移动过程中设置底部
-		this.setPadding(0, 0, 0, paddingHeight);
-/*		curbottom=footerView.getPaddingBottom();
-		new ScrollTask().execute(paddingHeight);*/
-		// 初始化箭头状态向上
-		if (paddingHeight <= presetHeight/3) {
-			return setStartLoad();
-		} else { // 改变按钮状态向下
-			return releaseLoad();
-		}
+			//移动过程中设置底部
+			this.setPadding(0, 0, 0, paddingHeight);
+	/*		curbottom=footerView.getPaddingBottom();
+			new ScrollTask().execute(paddingHeight);*/
+			// 初始化箭头状态向上
+			if (paddingHeight <= presetHeight/3) {
+				return setStartLoad();
+			} else { // 改变按钮状态向下
+				return releaseLoad();
+			}
 		}else{
 			return PullScrollView.GONE;
 		}

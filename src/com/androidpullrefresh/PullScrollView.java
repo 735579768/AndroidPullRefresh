@@ -263,16 +263,17 @@ public class PullScrollView extends ScrollView {
 	 * 改变 footerView 高度
 	 */
 	private void changefooterViewHeight(int tempY) {
+		//底部头如果是隐藏的话直接返回
 		if (footerView.getVisibility() == View.GONE) {
 			return;
 		}
-
-		if (getChildAt(0).getMeasuredHeight() <= getScrollY() + getHeight()) {
+		//如果scrollview已经滚动到底部的话就显示向上拉动加载更多
+		if (getScrollY() + getHeight()>=getChildAt(0).getMeasuredHeight()) {
 			if (pullState == DONE) {
 				pullState = footerView.setStartLoad();
 			}
 		}
-
+		//如果状态是向上拉动或松手加载更多就进行下面操作
 		if (pullState == PULL_UP_STATE || pullState == RELEASE_TO_LOADING) {
 			int pb=0;
 			pb=(Math.abs(-tempY) / RATIO);
