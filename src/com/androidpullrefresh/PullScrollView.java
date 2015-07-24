@@ -337,6 +337,14 @@ public class PullScrollView extends ScrollView {
 		pullState = DONE;
 	}
 	/**
+	 * 加载更多按钮不可见
+	 */
+	public void setfooterViewShow() {
+		footerView.setStartLoad();
+		footerView.show();
+		pullState = DONE;
+	}
+	/**
 	 * 设置页脚文本加载完成时状态
 	 */
 	public void setfooterLoadOverText(String str){
