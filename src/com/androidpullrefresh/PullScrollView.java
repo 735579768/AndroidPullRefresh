@@ -291,13 +291,13 @@ public class PullScrollView extends ScrollView {
 			if (pullState == RELEASE_TO_REFRESH) {
 				pullState = headerView.setRefreshing();
 				headerView.setPaddingTop(0);
-				onPullListener.refresh();
+				if(onPullListener!=null)onPullListener.refresh();
 			}
 			// 松开手加载更多
 			else if (pullState == RELEASE_TO_LOADING) {
 				pullState = footerView.setLoading();
 				footerView.setPaddingButtom();
-				onPullListener.loadMore();
+				if(onPullListener!=null)onPullListener.loadMore();
 			}
 			// 重置到最初状态
 			else {
