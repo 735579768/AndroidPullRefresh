@@ -236,8 +236,14 @@ public class PullScrollView extends ScrollView {
 					break;
 			}
 		}
-		//判断屏蔽滚动条直接返回
-		if(pullState != DONE && pullState!=LOADING && pullState!=REFRESHING)return true;
+		//下拉各释放状态下保持滚动条在上面
+		if(pullState==PULL_DOWN_STATE||pullState==RELEASE_TO_REFRESH){
+			this.fullScroll(ScrollView.FOCUS_UP);
+		}
+		//上拉和释放状态下保持滚动条在下面
+		if(pullState==RELEASE_TO_LOADING||pullState==PULL_UP_STATE){
+			this.fullScroll(ScrollView.FOCUS_DOWN);
+		}
 		return super.onTouchEvent(event);
 	}
 	/*
