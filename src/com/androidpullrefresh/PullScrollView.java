@@ -3,6 +3,8 @@ package com.androidpullrefresh;
 import java.text.SimpleDateFormat;
 
 import com.example.androidpulltest.R;
+
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -52,8 +54,11 @@ public class PullScrollView extends ScrollView {
 	public static final int		LOADING				= 6;
 
 	// 没做任何操作
-	private static final int	DONE				= 7;
-
+	public static final int	DONE				= 7;
+	// 设置滚动条到上面
+	public static final int	SET_SCROLL_UP		= 8;
+	// 设置滚动条到下面
+	public static final int	SET_SCROLL_DOWN		= 9;
 	// 实际的padding的距离与界面上偏移距离的比例
 	private final static int	RATIO				= 4;
 	private LinearLayout		innerLayout;
@@ -79,6 +84,8 @@ public class PullScrollView extends ScrollView {
 	
 	//是否要底部加载更多
 	private boolean 			isfooter=true;
+	//是否在线程中设置滚动条位置
+	private boolean 			isSetScrolling=false;
 	
 /*	Handler mHandler=new Handler();
 	Runnable scrollViewRunable = new Runnable() {  
@@ -107,9 +114,7 @@ public class PullScrollView extends ScrollView {
 	}
 
 	private void init(Context context) {
-
 		this.mContext = context;
-		this.setVerticalScrollBarEnabled(false);
 		// ScrollView 可以滑动必须有且只有一个子View - ScrollView 内装的View都将放在 innerLayout 里面
 		// ScrollView 设置为上下滚动 LinearLayout.VERTICAL
 		innerLayout = new LinearLayout(context);
@@ -250,14 +255,25 @@ public class PullScrollView extends ScrollView {
 					break;
 			}
 		}
-		//下拉各释放状态下保持滚动条在上面
+		if(pullState==DONE){
+			this.setVerticalScrollBarEnabled(true);
+		}else{
+			this.setVerticalScrollBarEnabled(false);
+		}
+		
+		//下拉和释放状态屏蔽滚动条
 		if(pullState==PULL_DOWN_STATE||pullState==RELEASE_TO_REFRESH){
-			this.fullScroll(ScrollView.FOCUS_UP);
+			return true;
 		}
-		//上拉和释放状态下保持滚动条在下面
-		if(pullState==RELEASE_TO_LOADING||pullState==PULL_UP_STATE){
-			this.fullScroll(ScrollView.FOCUS_DOWN);
+		//上拉和下保持滚动条在下面
+		if(pullState==PULL_UP_STATE){
+			//this.fullScroll(ScrollView.FOCUS_DOWN);
+			//启动线程设置滚动条到最下面,上面代码使用后会抖动
+			if(!isSetScrolling)new ScrollTask().execute(SET_SCROLL_DOWN);
+			return true;
 		}
+		//释放状态屏蔽滚动条
+		if(pullState==RELEASE_TO_LOADING)return true;
 		return super.onTouchEvent(event);
 	}
 	/*
@@ -417,7 +433,7 @@ public class PullScrollView extends ScrollView {
 	        return;
 	    }
 	    if( null != mHideAnimation ){
-	        mHideAnimation.cancel( );
+	        mHideAnimation.cancel();
 	    }
 	    mHideAnimation = new AlphaAnimation(1.0f, 0.1f);
 	    mHideAnimation.setDuration( duration );
@@ -433,7 +449,8 @@ public class PullScrollView extends ScrollView {
 	        return;
 	    }
 	    if( null != mShowAnimation ){
-	        mShowAnimation.cancel( );
+	    	//if(mShowAnimation.cancel()	instanceof null);
+	        mShowAnimation.cancel();
 	    }
 	    mShowAnimation = new AlphaAnimation(0.1f, 1.0f);
 	    mShowAnimation.setDuration( duration );
@@ -448,6 +465,60 @@ public class PullScrollView extends ScrollView {
 
 	public void setOnPullListener(OnPullListener onPullListener) {
 		this.onPullListener = onPullListener;
+	}
+   class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
+	   
+        @Override
+        protected Integer doInBackground(Integer... speed) {
+            // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
+        	isSetScrolling=true;
+        	int dbottom = speed[0];
+            while (true) {
+            	if(pullState==DONE){
+            		isSetScrolling=false;
+            		break;
+            	}
+                // 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
+            	publishProgress(dbottom);
+                sleep(1);
+            }
+            return 0;
+        }
+ 
+        @Override
+        protected void onProgressUpdate(Integer... ptop) {
+        	setScroll(ptop[0]);
+        }
+ 
+        @Override
+        protected void onPostExecute(Integer ptop) {
+        }
+        private void setScroll(int t){
+        	if(t==SET_SCROLL_UP){
+        		pullscrollView.fullScroll(FOCUS_UP);
+        	}else if(t==SET_SCROLL_DOWN){
+        		pullscrollView.fullScroll(FOCUS_DOWN);
+        	}
+        }
+    }
+ 
+    /**
+     * 使当前线程睡眠指定的毫秒数。
+     * 
+     * @param millis
+     *            指定当前线程睡眠多久，以毫秒为单位
+     */
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public void setBackgroundColor(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
@@ -685,7 +756,7 @@ class FooterView extends LinearLayout {
 		isArrowsUp = true;
 		return PullScrollView.PULL_UP_STATE;
 		}else{
-			return PullScrollView.GONE;
+			return PullScrollView.DONE;
 		}
 	}
 
@@ -745,7 +816,7 @@ class FooterView extends LinearLayout {
 				return releaseLoad();
 			}
 		}else{
-			return PullScrollView.GONE;
+			return PullScrollView.DONE;
 		}
 	}
 
