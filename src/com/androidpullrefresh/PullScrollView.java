@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import com.example.androidpulltest.R;
 
 
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -163,7 +164,12 @@ public class PullScrollView extends ScrollView {
 		footContentHeight = footerView.getMeasuredHeight();
 		footerView.setPaddingButtom();
 		footerView.invalidate();
-		setHideAnimation(footerView,0);
+		//先把页脚隐藏
+	    mHideAnimation = new AlphaAnimation(1.0f, 0.0f);
+	    mHideAnimation.setDuration(0);
+	    mHideAnimation.setFillAfter( true );
+	    footerView.startAnimation( mHideAnimation );
+	    
 		innerLayout.addView(footerView);
 	}
 
@@ -227,7 +233,6 @@ public class PullScrollView extends ScrollView {
 			switch (event.getAction()) {
 
 				case MotionEvent.ACTION_DOWN:
-					setShowAnimation(footerView,300);
 					scrollY = getScrollY();
 					startY = (int) event.getY();
 					break;
@@ -249,7 +254,6 @@ public class PullScrollView extends ScrollView {
 					break;
 
 				case MotionEvent.ACTION_UP:
-					setHideAnimation(footerView,300);
 					// 重置 headerView、footerView ,激化监听
 					resetPullStateForActionUp();
 					break;
@@ -338,6 +342,7 @@ public class PullScrollView extends ScrollView {
 				pullState = footerView.setLoading();
 				footerView.setPaddingButtom();
 				if(onPullListener!=null)onPullListener.loadMore();
+				setShowAnimation(footerView,300);
 			}
 			// 重置到最初状态
 			else {
@@ -910,5 +915,3 @@ class FooterView extends LinearLayout {
 		}
 
 }
-
-
