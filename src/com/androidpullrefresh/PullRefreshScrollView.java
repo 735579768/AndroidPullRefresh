@@ -89,19 +89,7 @@ public class PullRefreshScrollView extends ScrollView {
 	private boolean 			isfooter=true;
 	//是否在线程中设置滚动条位置
 	private boolean 			isSetScrolling=false;
-	
-/*	Handler mHandler=new Handler();
-	Runnable scrollViewRunable = new Runnable() {  
-	    @Override  
-	    public void run() {  
-	    	//pullscrollView.scrollTo(10, 10) ;
-			pullscrollView.fullScroll(ScrollView.FOCUS_UP);
-	    }  
-	  };*/
-	public void setFooterShow(boolean show){
-		this.isfooter=show;
-		innerLayout.removeViewAt(2);
-	}
+
 	public PullRefreshScrollView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
@@ -167,7 +155,7 @@ public class PullRefreshScrollView extends ScrollView {
 		footerView.setPaddingButtom();
 		footerView.invalidate();
 		//先把页脚隐藏
-	    mHideAnimation = new AlphaAnimation(1.0f, 0.0f);
+	    mHideAnimation = new AlphaAnimation(1.0f, 0.3f);
 	    mHideAnimation.setDuration(0);
 	    mHideAnimation.setFillAfter( true );
 	    footerView.startAnimation( mHideAnimation );
@@ -345,7 +333,7 @@ public class PullRefreshScrollView extends ScrollView {
 				footerView.setPaddingButtom();
 				pullState = footerView.setLoading();
 				if(onPullListener!=null)onPullListener.loadMore();
-				setShowAnimation(footerView,300);
+				//setShowAnimation(footerView,300);
 			}
 			// 重置到最初状态
 			else {
@@ -376,21 +364,17 @@ public class PullRefreshScrollView extends ScrollView {
 		headerView.setPaddingTop(-1 * headContentHeight);
 		pullState = DONE;
 	}
-
 	/**
-	 * 加载更多按钮不可见
+	 * 加载更多按钮可用状态
 	 */
-	public void setfooterViewGone() {
+	public void setfooterEnabled(boolean b){
+		this.isfooter=b;
+		if(b){
+			footerView.show();			
+		}else{
+			footerView.hide();			
+		}
 		footerView.setStartLoad();
-		footerView.hide();
-		pullState = DONE;
-	}
-	/**
-	 * 加载更多按钮可见
-	 */
-	public void setfooterViewShow() {
-		footerView.setStartLoad();
-		footerView.show();
 		pullState = DONE;
 	}
 	/**
@@ -435,7 +419,7 @@ public class PullRefreshScrollView extends ScrollView {
 	/**
 	* View渐隐动画效果
 	*
-	*/
+	
 	private void setHideAnimation( View view, int duration ){
 	    if( null == view || duration < 0 ){
 	        return;
@@ -448,10 +432,7 @@ public class PullRefreshScrollView extends ScrollView {
 	    mHideAnimation.setFillAfter( true );
 	    view.startAnimation( mHideAnimation );
 	}
-	/**
-	* View渐现动画效果
-	*
-	*/
+
 	private void setShowAnimation( View view, int duration ){
 	    if( null == view || duration < 0 ){
 	        return;
@@ -464,7 +445,7 @@ public class PullRefreshScrollView extends ScrollView {
 	    mShowAnimation.setDuration( duration );
 	    mShowAnimation.setFillAfter( true );
 	    view.startAnimation( mShowAnimation );
-	} 
+	} */
 	public interface OnPullListener {
 		void refresh();
 
