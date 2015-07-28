@@ -9,7 +9,7 @@
     
     	//取下拉刷新对象
 		pullScrollView = (PullScrollView) findViewById(R.id.scroll);
-		pullScrollView.setShowFooter(false);//不显示底部
+		pullScrollView.setfooterEnabled(true);//激活底部
 		//取要显示的内容视图
 		 contentLayout=(LinearLayout)pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
 		//内容视图设置下拉监听
