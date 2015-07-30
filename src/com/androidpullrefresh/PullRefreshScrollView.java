@@ -369,13 +369,13 @@ public class PullRefreshScrollView extends ScrollView {
 	 */
 	public void setfooterEnabled(boolean b){
 		this.isfooter=b;
+		footerView.setStartLoad();
+		pullState = DONE;
 		if(b){
 			footerView.show();			
 		}else{
 			footerView.hide();			
 		}
-		footerView.setStartLoad();
-		pullState = DONE;
 	}
 	/**
 	 * 设置页脚文本加载完成时状态
