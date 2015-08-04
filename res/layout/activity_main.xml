@@ -4,4 +4,14 @@
     android:id="@+id/scroll"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff" />
+    android:background="#ffffff">
+    <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <com.example.main.MyListView
+        android:id="@+id/ListViewTest"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+</com.androidpullrefresh.PullRefreshScrollView>

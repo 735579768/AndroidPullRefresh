@@ -35,15 +35,15 @@ public class MainActivity extends Activity implements OnPullListener {
 
 		//取下拉刷新对象
 		pullScrollView = (PullRefreshScrollView) findViewById(R.id.scroll);
-		pullScrollView.setfooterEnabled(false);
+		//pullScrollView.setfooterEnabled(false);
 		//取要显示的内容视图
-		 contentLayout=(LinearLayout)pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
+		pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
 		//内容视图设置下拉监听
 		pullScrollView.setOnPullListener(this);
 			
 			
 		 //初始化列表数据
-		listView = (ListView) contentLayout.findViewById(R.id.ListViewTest);
+		listView = (ListView)findViewById(R.id.ListViewTest);
 		data = new ArrayList<String>();
 		for (int i = 0; i < 19; i++) {
 			data.add("列表数据 " + i);
