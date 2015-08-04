@@ -1,10 +1,7 @@
 package com.androidpullrefresh;
-
 import java.text.SimpleDateFormat;
 
 import com.example.androidpulltest.R;
-
-
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -90,7 +87,7 @@ public class PullRefreshScrollView extends ScrollView {
 	//是否在线程中设置滚动条位置
 	private boolean 			isSetScrolling=false;
 	private ViewGroup childView;//原有的子视图
-
+	private boolean isInitUi=false;//是否已经初始化啦scrollview，防止重复添加布局	
 	public PullRefreshScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
@@ -106,6 +103,29 @@ public class PullRefreshScrollView extends ScrollView {
 		bodyLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT));
 		bodyLayout.setOrientation(LinearLayout.VERTICAL);
+		
+		footerView = new FooterView(mContext);
+		measureView(footerView);
+		footContentHeight = footerView.getMeasuredHeight();
+		footerView.setPaddingButtom();
+		footerView.invalidate();
+		//先把页脚隐藏
+	    mHideAnimation = new AlphaAnimation(1.0f, 0.3f);
+	    mHideAnimation.setDuration(0);
+	    mHideAnimation.setFillAfter( true );
+	    footerView.startAnimation( mHideAnimation );
+		
+		headerView = new HeaderView(mContext);
+		measureView(headerView);
+		headContentHeight = headerView.getMeasuredHeight();
+		Log.v("TouthY","headerview高度"+headContentHeight);
+		// 初始化 headerView 位置（不可见）
+		headerView.setPadding(0,-1 * headContentHeight,0,0);
+		headerView.invalidate();
+		
+		
+		//childView=(ViewGroup)this.getChildAt(0);
+		
 		pullscrollView=this;
 		// 初始化刷新、加载状态
 		pullState = DONE;
@@ -119,59 +139,24 @@ public class PullRefreshScrollView extends ScrollView {
 		// TODO Auto-generated method stub
 		super.onLayout(changed, l, t, r, b);
 		if(changed){
-			childView=(ViewGroup)this.getChildAt(0);
-			this.removeAllViews();
-			if(childView!=null){
+			if(childView==null && !isInitUi){
+				childView=(ViewGroup)this.getChildAt(0);
+				this.removeAllViews();
+				if(childView!=null){
 				bodyLayout.addView(childView,0);
+				}
+				innerLayout.addView(headerView,0);
+				innerLayout.addView(bodyLayout);
+				innerLayout.addView(footerView,-1);
+				if(isfooter){
+					footerView.show();			
+				}else{
+					footerView.hide();			
+				}
+				this.addView(innerLayout);
+				isInitUi=true;
 			}
-			this.addheaderView();
-			innerLayout.addView(bodyLayout);
-			this.addfooterView();
-			this.addView(innerLayout);
 		}
-	}
-
-	/**
-	 * 添加 headerView
-	 */
-	private void addheaderView() {
-		headerView = new HeaderView(mContext);
-		measureView(headerView);
-
-		headContentHeight = headerView.getMeasuredHeight();
-		Log.v("TouthY","headerview高度"+headContentHeight);
-		// 初始化 headerView 位置（不可见）
-		headerView.setPadding(0,-1 * headContentHeight,0,0);
-		headerView.invalidate();
-
-		innerLayout.addView(headerView,0);
-	}
-
-	/**
-	 * 添加 footerView
-	 */
-	private void addfooterView() {
-		if(isfooter){
-		footerView = new FooterView(mContext);
-		measureView(footerView);
-		footContentHeight = footerView.getMeasuredHeight();
-		footerView.setPaddingButtom();
-		footerView.invalidate();
-		//先把页脚隐藏
-	    mHideAnimation = new AlphaAnimation(1.0f, 0.3f);
-	    mHideAnimation.setDuration(0);
-	    mHideAnimation.setFillAfter( true );
-	    footerView.startAnimation( mHideAnimation );
-	    
-		innerLayout.addView(footerView,-1);
-		}
-	}
-
-	/**
-	 * 添加 BodyView : 滑动内容区域
-	 */
-	private void addBodyView(View view) {
-		bodyLayout.addView(view);
 	}
 	/**
 	 * 添加布局文件 : 滑动内容区域
@@ -180,11 +165,7 @@ public class PullRefreshScrollView extends ScrollView {
 	public View addBodyLayoutFile(Context context,int res){
 		LayoutInflater inflater=LayoutInflater.from(context);
 		View view=(LinearLayout)inflater.inflate(res, null);
-/*		if(childView==null){
-			childView=(ViewGroup)this.getChildAt(0);
-		}*/
 		bodyLayout.addView(view,-1);
-		//addBodyView(view);
 		return view;
 	}
 

@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -24,6 +28,8 @@ import com.example.androidpulltest.R;
 public class MainActivity extends Activity implements OnPullListener {
 
 	private PullRefreshScrollView	pullScrollView;
+	private Context mContext;
+	private Button addbtn;
 	private LinearLayout	contentLayout;
 	private ListView		listView;
 	private List<String>	data;
@@ -32,10 +38,19 @@ public class MainActivity extends Activity implements OnPullListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		this.mContext=this;
+		addbtn=(Button)findViewById(R.id.addbtn);
+		addbtn.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				pullScrollView.addBodyLayoutFile(mContext,R.layout.layout_content);
+			}
+			
+		});
 		//取下拉刷新对象
 		pullScrollView = (PullRefreshScrollView) findViewById(R.id.scroll);
-		//pullScrollView.setfooterEnabled(false);
+		pullScrollView.setfooterEnabled(false);
 		//取要显示的内容视图
 		pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
 		//内容视图设置下拉监听
