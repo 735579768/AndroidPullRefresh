@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnPullListener {
 	private Context mContext;
 	private Button addbtn;
 	private LinearLayout	contentLayout;
-	private ListView		listView;
+	private MyListView		listView;
 	private List<String>	data;
 
 	@Override
@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements OnPullListener {
 			
 			
 		 //初始化列表数据
-		listView = (ListView)findViewById(R.id.ListViewTest);
+		listView = (MyListView)findViewById(R.id.ListViewTest);
 		data = new ArrayList<String>();
 		for (int i = 0; i < 19; i++) {
 			data.add("列表数据 " + i);
