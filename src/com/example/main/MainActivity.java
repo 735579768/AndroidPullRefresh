@@ -50,9 +50,16 @@ public class MainActivity extends Activity implements OnPullListener {
 		});
 		//取下拉刷新对象
 		pullScrollView = (PullRefreshScrollView) findViewById(R.id.scroll);
-		pullScrollView.setfooterEnabled(true);
+		//开启页脚加载
+		//pullScrollView.setfooterEnabled(false);
+		
+		//开启自动加载
+		pullScrollView.setfooterAutoLoad(true);
+		//预加载高度
+		pullScrollView.setfooterAutoLoadPreHeight(100);
+		
 		//取要显示的内容视图
-		//pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
+		pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
 		//内容视图设置下拉监听
 		pullScrollView.setOnPullListener(this);
 			
@@ -61,7 +68,7 @@ public class MainActivity extends Activity implements OnPullListener {
 		listView = (MyListView)findViewById(R.id.ListViewTest);
 		listView.setFocusable(false);
 		data = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 18; i++) {
 			data.add("列表数据 " + i);
 		}
 		listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, data));
