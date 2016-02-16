@@ -358,7 +358,6 @@ public class PullRefreshScrollView extends ScrollView {
 				//if(isfooter){
 					//if(onPullListener!=null)onPullListener.loadMore();
 				//}
-				//setShowAnimation(footerView,300);
 			}
 			// 重置到最初状态
 			else {
@@ -442,16 +441,18 @@ public class PullRefreshScrollView extends ScrollView {
 	 */
 	public void setfooterViewReset() {
 		footerView.resetloadOver();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if(!isautoload){
+		if(isautoload){
+    		footerView.setStartLoad();
+    		pullState = DONE;
+		}else{
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
 					footerView.setPaddingButtom(-1 * footContentHeight);
-				}else{
-					footerView.setPaddingButtom(0);
-				}		
-			}
-		}, 1000);
+				}
+			}, 1000);			
+		}
+
 
 		
 	}
@@ -967,6 +968,8 @@ class FooterView extends LinearLayout {
 	            while (true) {
 	            	curbottom-=PullRefreshScrollView.BUZENG;
 	            	if(curbottom<=dbottom){
+	            		curbottom=dbottom;
+	            		publishProgress(curbottom);
 	            		break;
 	            	}
 	                // 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
@@ -983,17 +986,21 @@ class FooterView extends LinearLayout {
 	 
 	        @Override
 	        protected void onPostExecute(Integer ptop) {
+
 	        	if(isto0){
 	        		pullState = footerView.setLoading();
-		        	footerView.setStartLoad();
+	        		if(isautoload){
+	        			footerView.setStartLoad();
+	        		}
 					if(isfooter){
 						if(onPullListener!=null)onPullListener.loadMore();
 					}        		
 	        	}
 	        	if(isover){
-					footerView.setStartLoad();
-					pullState = DONE;
+	        		footerView.setStartLoad();
+	        		pullState = DONE;
 	        	}
+	        	
 	        	
 				
 
