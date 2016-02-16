@@ -989,9 +989,6 @@ class FooterView extends LinearLayout {
 
 	        	if(isto0){
 	        		pullState = footerView.setLoading();
-	        		if(isautoload){
-	        			footerView.setStartLoad();
-	        		}
 					if(isfooter){
 						if(onPullListener!=null)onPullListener.loadMore();
 					}        		
