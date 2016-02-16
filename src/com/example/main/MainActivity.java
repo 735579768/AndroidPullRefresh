@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements OnPullListener {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if(listView.getAdapter().getCount()>20){
+				if(listView.getAdapter().getCount()>40){
 				//加载完毕
 					pullScrollView.setfooterLoadOverText(null);
 				}else{

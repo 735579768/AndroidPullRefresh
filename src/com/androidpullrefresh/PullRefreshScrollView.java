@@ -353,11 +353,11 @@ public class PullRefreshScrollView extends ScrollView {
 			}
 			// 松开手加载更多
 			else if (pullState == RELEASE_TO_LOADING && !isautoload) {
-				pullState = footerView.setLoading();
+				//pullState = footerView.setLoading();
 				footerView.setPaddingButtom(0);
-				if(isfooter){
-					if(onPullListener!=null)onPullListener.loadMore();
-				}
+				//if(isfooter){
+					//if(onPullListener!=null)onPullListener.loadMore();
+				//}
 				//setShowAnimation(footerView,300);
 			}
 			// 重置到最初状态
@@ -442,13 +442,18 @@ public class PullRefreshScrollView extends ScrollView {
 	 */
 	public void setfooterViewReset() {
 		footerView.resetloadOver();
-		footerView.setStartLoad();
-		if(!isautoload){
-			footerView.setPaddingButtom(-1 * footContentHeight);
-		}else{
-			footerView.setPaddingButtom(0);
-		}
-		pullState = DONE;
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if(!isautoload){
+					footerView.setPaddingButtom(-1 * footContentHeight);
+				}else{
+					footerView.setPaddingButtom(0);
+				}		
+			}
+		}, 1000);
+
+		
 	}
 
 	/**
@@ -943,11 +948,22 @@ class FooterView extends LinearLayout {
 		this.setVisibility(View.GONE);
 	}
 	   class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
-		   
+		   private boolean isto0 = false;
+		   private boolean isover=false;		   
 	        @Override
 	        protected Integer doInBackground(Integer... speed) {
 	            // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
 	        	int dbottom = speed[0];
+	        	if (dbottom==0){
+	        		isto0=true;
+	        	}else{
+	        		isto0=false;
+	        	}
+	        	if(dbottom==(-1 * footContentHeight)){
+	        		isover=true;
+	        	}else{
+	        		isover=false;
+	        	}
 	            while (true) {
 	            	curbottom-=PullRefreshScrollView.BUZENG;
 	            	if(curbottom<=dbottom){
@@ -967,6 +983,19 @@ class FooterView extends LinearLayout {
 	 
 	        @Override
 	        protected void onPostExecute(Integer ptop) {
+	        	if(isto0){
+	        		pullState = footerView.setLoading();
+		        	footerView.setStartLoad();
+					if(isfooter){
+						if(onPullListener!=null)onPullListener.loadMore();
+					}        		
+	        	}
+	        	if(isover){
+					footerView.setStartLoad();
+					pullState = DONE;
+	        	}
+	        	
+				
 
 	        }
 	    }
