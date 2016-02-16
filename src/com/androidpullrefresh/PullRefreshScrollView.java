@@ -394,9 +394,14 @@ public class PullRefreshScrollView extends ScrollView {
 	 * 重置下拉刷新按钮状态并隐藏
 	 */
 	public void setheaderViewReset() {
-		headerView.setStartRefresh();
-		headerView.setPaddingTop(-1 * headContentHeight);
-		pullState = DONE;
+		headerView.refreshOver();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				headerView.setPaddingTop(-1 * headContentHeight);			
+			}
+		}, 1000);
+
 	}
 	/**
 	 * 加载更多按钮可用状态
@@ -604,6 +609,12 @@ class HeaderView extends LinearLayout {
 	}
 
 	/**
+	 * 刷新完成
+	 * */
+	public void refreshOver(){
+		tvRefresh.setText("刷新完成");
+	}
+	/**
 	 * 下拉刷新
 	 */
 	public int setStartRefresh() {
@@ -710,7 +721,8 @@ class HeaderView extends LinearLayout {
 		}
 	}
 	   class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
-		   private boolean isto0 = false;//渐显
+		   private boolean isto0 = false;
+		   private boolean isover=false;
 	        @Override
 	        protected Integer doInBackground(Integer... speed) {
 	            // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
@@ -719,6 +731,11 @@ class HeaderView extends LinearLayout {
 	        		isto0=true;
 	        	}else{
 	        		isto0=false;
+	        	}
+	        	if(ptop==(-1 * headContentHeight)){
+	        		isover=true;
+	        	}else{
+	        		isover=false;
 	        	}
 	            while (true) {
 	            	curtop-=PullRefreshScrollView.BUZENG;
@@ -743,6 +760,10 @@ class HeaderView extends LinearLayout {
 		        	pullState = headerView.setRefreshing();
 		        	footerView.setStartLoad();
 		        	if(onPullListener!=null)onPullListener.refresh();	        		
+	        	}
+	        	if(isover){
+					headerView.setStartRefresh();
+					pullState = DONE;	      		
 	        	}
 
 	        }
