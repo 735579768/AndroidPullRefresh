@@ -108,7 +108,7 @@ public class PullRefreshScrollView extends ScrollView {
                 handler.sendMessageDelayed(handler.obtainMessage(), 5);    
             }else{
         		//如果开启啦自动加载滚动条到下面时直接自动加载
-            	int aa=getScrollY() + getHeight()+preHeight;
+            	int aa=getScrollY() + getHeight()+preHeight+footContentHeight;
             	int bb=getChildAt(0).getMeasuredHeight();
         		if(aa>=bb){
         			pullState = footerView.setLoading();
@@ -714,7 +714,7 @@ class HeaderView extends LinearLayout {
 	 * 初始化 HeadView PaddingTop
 	 */
 	public void setPaddingTop(int paddingTop) {
-		Log.v("paddingtop","手松开时的内边距:"+headerView.getPaddingTop()+",要滚动到"+paddingTop);
+		Log.v("paddingtop","手松开时headerview的内边距:"+headerView.getPaddingTop()+",要滚动到"+paddingTop);
 		
 		//this.setPadding(0, paddingTop, 0, 0);
 		curtop=headerView.getPaddingTop();
@@ -775,7 +775,7 @@ class HeaderView extends LinearLayout {
 	     * 使当前线程睡眠指定的毫秒数。
 	     * 
 	     * @param millis
-	     *            指定当前线程睡眠多久，以毫秒为单位
+	     * 指定当前线程睡眠多久，以毫秒为单位
 	     */
 	    private void sleep(long millis) {
 	        try {

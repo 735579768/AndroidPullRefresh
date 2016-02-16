@@ -56,7 +56,7 @@ public class MainActivity extends Activity implements OnPullListener {
 		//开启自动加载
 		pullScrollView.setfooterAutoLoad(true);
 		//预加载高度
-		pullScrollView.setfooterAutoLoadPreHeight(100);
+		pullScrollView.setfooterAutoLoadPreHeight(400);
 		
 		//取要显示的内容视图
 		pullScrollView.addBodyLayoutFile(this,R.layout.layout_content);
