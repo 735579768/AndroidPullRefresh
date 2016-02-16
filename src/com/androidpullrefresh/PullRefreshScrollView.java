@@ -274,11 +274,6 @@ public class PullRefreshScrollView extends ScrollView {
 			}
 		}
 		this.setVerticalScrollBarEnabled(true);
-/*		if(pullState==DONE){
-			this.setVerticalScrollBarEnabled(true);
-		}else{
-			this.setVerticalScrollBarEnabled(false);
-		}*/
 		
 		//下拉和释放状态屏蔽滚动条
 		if(pullState==PULL_DOWN_STATE||pullState==RELEASE_TO_REFRESH){
@@ -613,6 +608,7 @@ class HeaderView extends LinearLayout {
 	 * */
 	public void refreshOver(){
 		tvRefresh.setText("刷新完成");
+		progressBar.setVisibility(View.GONE);
 	}
 	/**
 	 * 下拉刷新
