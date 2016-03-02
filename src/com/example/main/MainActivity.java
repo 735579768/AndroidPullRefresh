@@ -12,8 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 
 import com.androidpullrefresh.PullRefreshScrollView;
@@ -30,7 +28,6 @@ public class MainActivity extends Activity implements OnPullListener {
 	private PullRefreshScrollView	pullScrollView;
 	private Context mContext;
 	private Button addbtn;
-	private LinearLayout	contentLayout;
 	private MyListView		listView;
 	private List<String>	data;
 

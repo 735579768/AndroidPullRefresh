@@ -28,8 +28,8 @@ import android.widget.TextView;
  * @author www.zhaokeli.com
  */
 public class PullRefreshScrollView extends ScrollView {
-	public static final int 		SUDU=1;//动画 间隔速度
-	public static final int 		BUZENG=15;//动画步增速度
+	public static final int 		SUDU=100;//动画 间隔速度
+	public static final int 		BUZENG=1;//动画步增速度
 	private AlphaAnimation mHideAnimation= null;//渐隐
 
 	private AlphaAnimation mShowAnimation= null;//渐显
@@ -692,14 +692,10 @@ class HeaderView extends LinearLayout {
 	 *            当前高度
 	 */
 	public int setPadding(int presetHeight, int currentHeight) {
-		//sudu=5;
-		//if(currentHeight<headContentHeight)currentHeight=presetHeight;
-		//移动过程中设置顶部
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+		Log.v("header_paddingtop", currentHeight+"--->time:"+sdf.format(new java.util.Date()));
 		this.setPadding(0, currentHeight, 0, 0);
-		//if(TextUtils.isEmpty(refreshDate))refreshDate="未刷新过";
 		tvDate.setText(refreshDate);
-/*		curtop=headerView.getPaddingTop();
-		new ScrollTask().execute(currentHeight);*/
 		// 初始化箭头状态向下
 		if (currentHeight <= presetHeight/2) {
 			Log.v("TouthY","状态改变成下拉刷新");
@@ -746,14 +742,14 @@ class HeaderView extends LinearLayout {
 	            	}
 	                // 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
 	            	publishProgress(curtop);
-	                sleep(PullRefreshScrollView.SUDU);
+	                sleep(PullRefreshScrollView.SUDU/1000);
 	            }
 				return ptop;
 	        }
 	 
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
-	        	headerView.setPadding(0, ptop[0], 0, 0);
+	        	headerView.setPadding(0, ptop[0]);
 	        }
 	 
 	        @Override
@@ -974,14 +970,14 @@ class FooterView extends LinearLayout {
 	            	}
 	                // 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
 	            	publishProgress(curbottom);
-	                sleep(PullRefreshScrollView.SUDU);
+	                sleep(PullRefreshScrollView.SUDU/1000);
 	            }
 				return dbottom;
 	        }
 	 
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
-	        	footerView.setPadding(0, 0, 0, ptop[0]);
+	        	footerView.setPadding(0, ptop[0]);
 	        }
 	 
 	        @Override
