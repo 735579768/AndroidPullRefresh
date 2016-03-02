@@ -759,7 +759,7 @@ class HeaderView extends LinearLayout {
 
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
-	        	headerView.setPadding(0, ptop[0]);
+	        	headerView.setPadding(0, ptop[0],0,0);
 	        }
 
 	        @Override
