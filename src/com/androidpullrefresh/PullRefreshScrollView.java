@@ -23,7 +23,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
- * 
+ *
  * @since 2015 07 23
  * @author www.zhaokeli.com
  */
@@ -33,6 +33,16 @@ public class PullRefreshScrollView extends ScrollView {
 	private AlphaAnimation mHideAnimation= null;//渐隐
 
 	private AlphaAnimation mShowAnimation= null;//渐显
+
+	public static  String MSG_TEXT_REFRESH_OVER="刷新完成";
+	public static  String MSG_TEXT_REFRESHING="正在刷新...";
+	public static  String MSG_TEXT_TIME="从未刷新";
+	public static  String MSG_TEXT_DOWN_REFRESH="下拉刷新";
+	public static  String MSG_TEXT_UP_LOAD_MORE="上拉加载更多";
+	public static  String MSG_TEXT_RELEASE_REFRESH="松开手刷新";
+	public static  String MSG_TEXT_LOADMOREING="正在加载更多...";
+	public static  String MSG_TEXT_RELEASE_LOAD_MORE="松开手加载更多";
+	public static  String MSG_TEXT_LOAD_OVER="加载完毕";
 
 	private static final String	TAG					= "PullScrollView";
 
@@ -94,18 +104,18 @@ public class PullRefreshScrollView extends ScrollView {
 	private boolean 			isSetScrolling=false;
 	private ViewGroup childView;//原有的子视图
 	private boolean isInitUi=false;//是否已经初始化啦scrollview，防止重复添加布局
-	
-	 /** 
-     * 用于用户手指离开MyScrollView的时候获取MyScrollView滚动的Y距离，然后回调给onScroll方法中 
-     */  
-    private Handler handler = new Handler() {  
-  
-        public void handleMessage(android.os.Message msg) {  
-        	int scrY =getScrollY(); 
-            //此时的距离和记录下的距离不相等说明没有停止，在隔5毫秒给handler发送消息  
-            if(lastScrollY!= scrY){  
-                lastScrollY = scrY;  
-                handler.sendMessageDelayed(handler.obtainMessage(), 5);    
+
+	 /**
+     * 用于用户手指离开MyScrollView的时候获取MyScrollView滚动的Y距离，然后回调给onScroll方法中
+     */
+    private Handler handler = new Handler() {
+
+        public void handleMessage(android.os.Message msg) {
+        	int scrY =getScrollY();
+            //此时的距离和记录下的距离不相等说明没有停止，在隔5毫秒给handler发送消息
+            if(lastScrollY!= scrY){
+                lastScrollY = scrY;
+                handler.sendMessageDelayed(handler.obtainMessage(), 5);
             }else{
         		//如果开启啦自动加载滚动条到下面时直接自动加载
             	int aa=getScrollY() + getHeight()+preHeight+footContentHeight;
@@ -116,15 +126,15 @@ public class PullRefreshScrollView extends ScrollView {
         			footerView.show();
         			footerView.setPaddingButtom(0);
         			if(onPullListener!=null)onPullListener.loadMore();
-        		}           	
+        		}
             }
-            /* if(onScrollListener != null){  
-                onScrollListener.onScroll(scrollY);  
+            /* if(onScrollListener != null){
+                onScrollListener.onScroll(scrollY);
             }  */
-              
-        };  
-  
-    };   
+
+        };
+
+    };
 	public PullRefreshScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
@@ -140,7 +150,7 @@ public class PullRefreshScrollView extends ScrollView {
 		bodyLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT));
 		bodyLayout.setOrientation(LinearLayout.VERTICAL);
-		
+
 		footerView = new FooterView(mContext);
 		measureView(footerView);
 		footContentHeight = footerView.getMeasuredHeight();
@@ -151,7 +161,7 @@ public class PullRefreshScrollView extends ScrollView {
 	    mHideAnimation.setDuration(0);
 	    mHideAnimation.setFillAfter( true );
 	    footerView.startAnimation( mHideAnimation );
-		
+
 		headerView = new HeaderView(mContext);
 		measureView(headerView);
 		headContentHeight = headerView.getMeasuredHeight();
@@ -159,10 +169,10 @@ public class PullRefreshScrollView extends ScrollView {
 		// 初始化 headerView 位置（不可见）
 		headerView.setPadding(0,-1 * headContentHeight,0,0);
 		headerView.invalidate();
-		
-		
+
+
 		//childView=(ViewGroup)this.getChildAt(0);
-		
+
 		pullscrollView=this;
 		// 初始化刷新、加载状态
 		pullState = DONE;
@@ -186,9 +196,9 @@ public class PullRefreshScrollView extends ScrollView {
 				innerLayout.addView(bodyLayout);
 				innerLayout.addView(footerView,-1);
 				if(isfooter||isautoload){
-					footerView.show();			
+					footerView.show();
 				}else{
-					footerView.hide();			
+					footerView.hide();
 				}
 				this.addView(innerLayout);
 				isInitUi=true;
@@ -198,7 +208,7 @@ public class PullRefreshScrollView extends ScrollView {
 	/**
 	 * 添加布局文件 : 滑动内容区域
 	 * 返回添加成功的view
-	 */	
+	 */
 	public View addBodyLayoutFile(Context context,int res){
 		LayoutInflater inflater=LayoutInflater.from(context);
 		View view=(LinearLayout)inflater.inflate(res, null);
@@ -208,9 +218,9 @@ public class PullRefreshScrollView extends ScrollView {
 
 	/**
 	 * 滑动时，首先会触发 onInterceptTouchEvent事件，然后触发 onTouchEvent 事件时
-	 * 
+	 *
 	 * onInterceptTouchEvent 总是将 onTouchEvent 事件中的 ACTION_DOWN 事件拦截
-	 * 
+	 *
 	 * 所以在此做监听，以防万一
 	 */
 	@Override
@@ -235,7 +245,7 @@ public class PullRefreshScrollView extends ScrollView {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		 
+
 		if (isLoadable()) {
 			switch (event.getAction()) {
 
@@ -245,17 +255,17 @@ public class PullRefreshScrollView extends ScrollView {
 					break;
 
 				case MotionEvent.ACTION_MOVE:
-					
+
 					int tempY = (int) event.getY() - startY;
-					
+
 					// 如果 ScrollViwe 滑到最顶端，且有下拉刷新手势，则激活下拉刷新动作
 					if (tempY > 0 && scrollY == 0) {
 						//historyY=tempY;
 						changeheaderViewHeight(tempY);
 					}
-					
+
 					// 如果 ScrollViwe 滑倒最底端，且有上拉刷加载更多手势，则激活上拉加载更多动作
-					
+
 					else if (tempY<0 && isfooter) { // 上拉加载更多
 						changefooterViewHeight(tempY);
 					}
@@ -263,18 +273,18 @@ public class PullRefreshScrollView extends ScrollView {
 
 				case MotionEvent.ACTION_UP:
 					if(isautoload){
-					//当用户抬起手我们隔5毫秒给handler发送消息，在handler处理 
-					if(!footerView.isloadover)handler.sendMessageDelayed(handler.obtainMessage(), 5);  
+					//当用户抬起手我们隔5毫秒给handler发送消息，在handler处理
+					if(!footerView.isloadover)handler.sendMessageDelayed(handler.obtainMessage(), 5);
 					}
 					//重置 headerView、footerView ,激化监听
 					this.setFocusable(true);
 					resetPullStateForActionUp();
-					
+
 					break;
 			}
 		}
 		this.setVerticalScrollBarEnabled(true);
-		
+
 		//下拉和释放状态屏蔽滚动条
 		if(pullState==PULL_DOWN_STATE||pullState==RELEASE_TO_REFRESH){
 			return true;
@@ -287,7 +297,7 @@ public class PullRefreshScrollView extends ScrollView {
 			return true;
 		}
 		//释放状态屏蔽滚动条
-		
+
 		if(pullState==RELEASE_TO_LOADING)return true;
 		return super.onTouchEvent(event);
 	}
@@ -302,9 +312,9 @@ public class PullRefreshScrollView extends ScrollView {
 		}
 
 		if (pullState == PULL_DOWN_STATE || pullState == RELEASE_TO_REFRESH) {
-			
+
 			int pdtop=0;
-			
+
 			pdtop=-1 * headContentHeight + tempY / RATIO;
 			Log.v("TouthY", pdtop+"");
 			//if(pdtop<-1 * headContentHeight)pdtop=-1 * headContentHeight;
@@ -348,7 +358,7 @@ public class PullRefreshScrollView extends ScrollView {
 				//pullState = headerView.setRefreshing();
 				headerView.setPaddingTop(0);
 				//footerView.setStartLoad();
-				
+
 				//if(onPullListener!=null)onPullListener.refresh();
 			}
 			// 松开手加载更多
@@ -367,7 +377,7 @@ public class PullRefreshScrollView extends ScrollView {
 				}else{
 					footerView.setPaddingButtom(-1 * footContentHeight);
 				}
-				
+
 				pullState = DONE;
 			}
 		}
@@ -375,7 +385,7 @@ public class PullRefreshScrollView extends ScrollView {
 
 	/**
 	 * 判断是否可以上下拉刷新加载手势
-	 * 
+	 *
 	 * @return true：可以
 	 */
 	private boolean isLoadable() {
@@ -392,7 +402,7 @@ public class PullRefreshScrollView extends ScrollView {
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				headerView.setPaddingTop(-1 * headContentHeight);			
+				headerView.setPaddingTop(-1 * headContentHeight);
 			}
 		}, 1000);
 
@@ -405,9 +415,9 @@ public class PullRefreshScrollView extends ScrollView {
 		footerView.setStartLoad();
 		pullState = DONE;
 		if(b){
-			footerView.show();			
+			footerView.show();
 		}else{
-			footerView.hide();	
+			footerView.hide();
 			isautoload=false;
 		}
 	}
@@ -432,7 +442,7 @@ public class PullRefreshScrollView extends ScrollView {
 	 * 设置页脚文本加载完成时状态
 	 */
 	public void setfooterLoadOverText(String str){
-		if(TextUtils.isEmpty(str))str="加载完成";
+		if(TextUtils.isEmpty(str))str=MSG_TEXT_LOAD_OVER;
 		footerView.setloadOverText(str);
 		pullState = DONE;
 	}
@@ -450,18 +460,18 @@ public class PullRefreshScrollView extends ScrollView {
 				public void run() {
 					footerView.setPaddingButtom(-1 * footContentHeight);
 				}
-			}, 1000);			
+			}, 1000);
 		}
 
 
-		
+
 	}
 
 	/**
 	 * 如果：高度>0,则有父类完全决定子窗口高度大小；否则，由子窗口自己觉得自己的高度大小
-	 * 
+	 *
 	 * 设置 headerView、HootViwe 的 LayoutParams 属性
-	 * 
+	 *
 	 * @param childView
 	 */
 	private void measureView(View childView) {
@@ -482,7 +492,7 @@ public class PullRefreshScrollView extends ScrollView {
 	/**
 	* View渐隐动画效果
 	*
-	
+
 	private void setHideAnimation( View view, int duration ){
 	    if( null == view || duration < 0 ){
 	        return;
@@ -519,7 +529,7 @@ public class PullRefreshScrollView extends ScrollView {
 		this.onPullListener = onPullListener;
 	}
     class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
-	   
+
         @Override
         protected Integer doInBackground(Integer... speed) {
             // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
@@ -536,12 +546,12 @@ public class PullRefreshScrollView extends ScrollView {
             }
             return 0;
         }
- 
+
         @Override
         protected void onProgressUpdate(Integer... ptop) {
         	setScroll(ptop[0]);
         }
- 
+
         @Override
         protected void onPostExecute(Integer ptop) {
         }
@@ -553,10 +563,10 @@ public class PullRefreshScrollView extends ScrollView {
         	}
         }
     }
- 
+
     /**
      * 使当前线程睡眠指定的毫秒数。
-     * 
+     *
      * @param millis
      *            指定当前线程睡眠多久，以毫秒为单位
      */
@@ -570,12 +580,12 @@ public class PullRefreshScrollView extends ScrollView {
 
 	public void setBackgroundColor(String string) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
 /**
-* 
+*
 * @since 2015 07 23
 * @author www.zhaokeli.com
 */
@@ -591,7 +601,7 @@ class HeaderView extends LinearLayout {
 
 	public HeaderView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 	}
 
 	public HeaderView(Context context) {
@@ -613,7 +623,7 @@ class HeaderView extends LinearLayout {
 	 * 刷新完成
 	 * */
 	public void refreshOver(){
-		tvRefresh.setText("刷新完成");
+		tvRefresh.setText(MSG_TEXT_REFRESH_OVER);
 		progressBar.setVisibility(View.GONE);
 	}
 	/**
@@ -624,7 +634,7 @@ class HeaderView extends LinearLayout {
 		tvRefresh.setVisibility(View.VISIBLE);
 		tvDate.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
-		tvRefresh.setText("下拉刷新");
+		tvRefresh.setText(MSG_TEXT_DOWN_REFRESH);
 
 		if (!isArrowsUp) {
 			RotateAnimation mReverseFlipAnimation = new RotateAnimation(-180, 0, RotateAnimation.RELATIVE_TO_SELF,
@@ -649,7 +659,7 @@ class HeaderView extends LinearLayout {
 		tvRefresh.setVisibility(View.VISIBLE);
 		tvDate.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
-		tvRefresh.setText("松开手刷新");
+		tvRefresh.setText(MSG_TEXT_RELEASE_REFRESH);
 
 		if (isArrowsUp) {
 			RotateAnimation animationUp = new RotateAnimation(0, -180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -673,19 +683,19 @@ class HeaderView extends LinearLayout {
 		arrows.clearAnimation();
 		arrows.setVisibility(View.GONE);
 		tvRefresh.setVisibility(View.VISIBLE);
-/*		if(TextUtils.isEmpty(refreshDate))refreshDate="未刷新过";
-		tvDate.setText(refreshDate);*/
+		if(TextUtils.isEmpty(refreshDate))refreshDate=MSG_TEXT_TIME;
+		tvDate.setText(refreshDate);
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		refreshDate="上次更新:"+sdf.format(new java.util.Date());
 		tvDate.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.VISIBLE);
-		tvRefresh.setText("正在刷新...");
+		tvRefresh.setText(MSG_TEXT_REFRESHING);
 		return PullRefreshScrollView.REFRESHING;
 	}
 
 	/**
 	 * 设置 View 高度
-	 * 
+	 *
 	 * @param presetHeight
 	 *            原始高度
 	 * @param currentHeight
@@ -711,7 +721,7 @@ class HeaderView extends LinearLayout {
 	 */
 	public void setPaddingTop(int paddingTop) {
 		Log.v("paddingtop","手松开时headerview的内边距:"+headerView.getPaddingTop()+",要滚动到"+paddingTop);
-		
+
 		//this.setPadding(0, paddingTop, 0, 0);
 		curtop=headerView.getPaddingTop();
 		if(curtop!=paddingTop){
@@ -746,30 +756,30 @@ class HeaderView extends LinearLayout {
 	            }
 				return ptop;
 	        }
-	 
+
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
 	        	headerView.setPadding(0, ptop[0]);
 	        }
-	 
+
 	        @Override
 	        protected void onPostExecute(Integer ptop) {
 	        	if(isto0){
 		        	pullState = headerView.setRefreshing();
 		        	footerView.setStartLoad();
-		        	if(onPullListener!=null)onPullListener.refresh();	        		
+		        	if(onPullListener!=null)onPullListener.refresh();
 	        	}
 	        	if(isover){
 					headerView.setStartRefresh();
-					pullState = DONE;	      		
+					pullState = DONE;
 	        	}
 
 	        }
 	    }
-	 
+
 	    /**
 	     * 使当前线程睡眠指定的毫秒数。
-	     * 
+	     *
 	     * @param millis
 	     * 指定当前线程睡眠多久，以毫秒为单位
 	     */
@@ -784,7 +794,7 @@ class HeaderView extends LinearLayout {
 
 
 /**
- * 
+ *
  * @since 2015 07 23
  * @author www.zhaokeli.com
  */
@@ -821,7 +831,7 @@ class FooterView extends LinearLayout {
 		if(!isloadover){
 		progressBar.setVisibility(View.GONE);
 		arrows.setVisibility(View.VISIBLE);
-		tvRefresh.setText("上拉加载更多");
+		tvRefresh.setText(MSG_TEXT_UP_LOAD_MORE);
 
 		if (!isArrowsUp) {
 			RotateAnimation mReverseFlipAnimation = new RotateAnimation(180, 0, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -847,7 +857,7 @@ class FooterView extends LinearLayout {
 	public int releaseLoad() {
 		progressBar.setVisibility(View.GONE);
 		arrows.setVisibility(View.VISIBLE);
-		tvRefresh.setText("松开手加载更多");
+		tvRefresh.setText(MSG_TEXT_RELEASE_LOAD_MORE);
 
 		if (isArrowsUp) {
 			RotateAnimation animationUp = new RotateAnimation(0, 180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -871,13 +881,13 @@ class FooterView extends LinearLayout {
 		arrows.clearAnimation();
 		progressBar.setVisibility(View.VISIBLE);
 		arrows.setVisibility(View.GONE);
-		tvRefresh.setText("正在加载更多");
+		tvRefresh.setText(MSG_TEXT_LOADMOREING);
 		return PullRefreshScrollView.LOADING;
 	}
 
 	/**
 	 * 设置 View 高度
-	 * 
+	 *
 	 * @param presetHeight
 	 *            原始高度
 	 * @param currentHeight
@@ -924,7 +934,7 @@ class FooterView extends LinearLayout {
 	 * */
 	public void setloadOverText(String str){
 		isloadover=true;
-		if(TextUtils.isEmpty(str))str="加载完毕";
+		if(TextUtils.isEmpty(str))str=MSG_TEXT_LOAD_OVER;
 		tvRefresh.setText(str);
 		arrows.setVisibility(View.GONE);
 		progressBar.setVisibility(View.GONE);
@@ -934,9 +944,9 @@ class FooterView extends LinearLayout {
 	 ***/
 	public void resetloadOver(){
 		isloadover=false;//设置成数据没有加载完成重新加载
-		tvRefresh.setText("上拉加载更多");
+		tvRefresh.setText(MSG_TEXT_UP_LOAD_MORE);
 		arrows.setVisibility(View.VISIBLE);
-		progressBar.setVisibility(View.VISIBLE);		
+		progressBar.setVisibility(View.VISIBLE);
 	}
 	/**
 	 * 隐藏加载更多按钮
@@ -946,7 +956,7 @@ class FooterView extends LinearLayout {
 	}
 	   class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
 		   private boolean isto0 = false;
-		   private boolean isover=false;		   
+		   private boolean isover=false;
 	        @Override
 	        protected Integer doInBackground(Integer... speed) {
 	            // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
@@ -974,12 +984,12 @@ class FooterView extends LinearLayout {
 	            }
 				return dbottom;
 	        }
-	 
+
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
 	        	footerView.setPadding(0, ptop[0]);
 	        }
-	 
+
 	        @Override
 	        protected void onPostExecute(Integer ptop) {
 
@@ -987,22 +997,22 @@ class FooterView extends LinearLayout {
 	        		pullState = footerView.setLoading();
 					if(isfooter){
 						if(onPullListener!=null)onPullListener.loadMore();
-					}        		
+					}
 	        	}
 	        	if(isover){
 	        		footerView.setStartLoad();
 	        		pullState = DONE;
 	        	}
-	        	
-	        	
-				
+
+
+
 
 	        }
 	    }
-	 
+
 	    /**
 	     * 使当前线程睡眠指定的毫秒数。
-	     * 
+	     *
 	     * @param millis
 	     *            指定当前线程睡眠多久，以毫秒为单位
 	     */
@@ -1016,7 +1026,7 @@ class FooterView extends LinearLayout {
 
 		public void setBackgroundColor(String string) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 }
