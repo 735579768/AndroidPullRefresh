@@ -59,6 +59,7 @@
             android:gravity="center|center_vertical"
             android:text=""
             android:textSize="12sp"
+            android:textColor="#aaaaaa"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:visibility="gone" />
         </RelativeLayout>

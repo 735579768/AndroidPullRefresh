@@ -702,8 +702,6 @@ class HeaderView extends LinearLayout {
 	 *            当前高度
 	 */
 	public int setPadding(int presetHeight, int currentHeight) {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-		Log.v("header_paddingtop", currentHeight+"--->time:"+sdf.format(new java.util.Date()));
 		this.setPadding(0, currentHeight, 0, 0);
 		tvDate.setText(refreshDate);
 		// 初始化箭头状态向下
@@ -759,6 +757,8 @@ class HeaderView extends LinearLayout {
 
 	        @Override
 	        protected void onProgressUpdate(Integer... ptop) {
+	    		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+	    		Log.v("header_paddingtop", ptop[0]+"--->time:"+sdf.format(new java.util.Date()));
 	        	headerView.setPadding(0, ptop[0],0,0);
 	        }
 
