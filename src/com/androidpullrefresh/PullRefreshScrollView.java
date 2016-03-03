@@ -702,7 +702,9 @@ class HeaderView extends LinearLayout {
 	 *            当前高度
 	 */
 	public int setPadding(int presetHeight, int currentHeight) {
-		this.setPadding(0, currentHeight, 0, 0);
+		if(currentHeight < presetHeight){
+			this.setPadding(0, currentHeight, 0, 0);
+		}
 		tvDate.setText(refreshDate);
 		// 初始化箭头状态向下
 		if (currentHeight <= presetHeight/2) {
