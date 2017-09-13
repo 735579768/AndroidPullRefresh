@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\pull_footer.xml",
+        "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\layout\\pull_footer.xml"
+    },
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\layout_content.xml",
+        "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\layout\\layout_content.xml"
+    },
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\pull_header.xml",
+        "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\layout\\pull_header.xml"
+    },
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\layout\\activity_main.xml"
+    }
+]
