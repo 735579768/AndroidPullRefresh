@@ -8,6 +8,18 @@
         "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\drawable-hdpi\\ic_pulltorefresh_arrow.png"
     },
     {
+        "merged": "E:\\gitserver\\AndroidPullRefresh\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "E:\\gitserver\\AndroidPullRefresh\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_pulltorefresh_arrow_up.png",
+        "source": "E:\\gitserver\\AndroidPullRefresh\\app\\src\\main\\res\\drawable-hdpi\\ic_pulltorefresh_arrow_up.png"
+    },
+    {
+        "merged": "E:\\gitserver\\AndroidPullRefresh\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_pulltorefresh_arrow.png",
+        "source": "E:\\gitserver\\AndroidPullRefresh\\app\\src\\main\\res\\drawable-hdpi\\ic_pulltorefresh_arrow.png"
+    },
+    {
         "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_pulltorefresh_arrow_up.png",
         "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\drawable-hdpi\\ic_pulltorefresh_arrow_up.png"
     }

@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\gitserver\\AndroidPullRefresh\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_launcher.png",
+        "source": "E:\\gitserver\\AndroidPullRefresh\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
         "merged": "E:\\gitserver\\AndroidPullRefresh1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\ic_launcher.png",
         "source": "E:\\gitserver\\AndroidPullRefresh1\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
     }
